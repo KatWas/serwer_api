@@ -6,6 +6,8 @@ const app = express();
 
 // import routes
 const testimonialsRoutes = require('./routes/testimonials.routes');
+const concertsRoutes = require('./routes/concerts.routes');
+const seatsRoutes = require('./routes/seats.routes');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
