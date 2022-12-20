@@ -14,6 +14,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api', testimonialsRoutes);
+app.use('/api', concertsRoutes);
+app.use('/api', seatsRoutes);
 
 app.use(( req, res ) => {
 res.status(400).send('404 not found...');
