@@ -8,7 +8,7 @@ const db = {
     { id: 2, performer: 'Rebekah Parker', genre: 'R&B', price: 25, day: 1, image: '/img/uploads/2f342s4fsdg.jpg' },
     { id: 3, performer: 'Maybell Haley', genre: 'Pop', price: 40, day: 1, image: '/img/uploads/hdfh42sd213.jpg' },  
   ],
-  concerts: [
+  seats: [
     { id: 1, day: 1, seat: 3, client: 'Amanda Doe', email: 'amandadoe@example.com' },
     { id: 2, day: 1, seat: 9, client: 'Curtis Johnson', email: 'curtisj@example.com'  },
     { id: 3, day: 1, seat: 10, client: 'Felix McManara', email: 'felxim98@example.com'  },
