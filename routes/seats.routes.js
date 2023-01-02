@@ -28,7 +28,7 @@ router.route('/seats').post(function(req, res) {
         
     };
     db.seats.push(newSeat)
-    res.json(newSeat, { message: 'OK' });
+    res.json({ message: 'OK' });
 });
 
 router.route('/Seats/:id').put(function(req, res) {
