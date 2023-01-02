@@ -22,13 +22,15 @@ app.use('/api', testimonialsRoutes);
 app.use('/api', concertsRoutes);
 app.use('/api', seatsRoutes);
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/client/build/index.html'));
+});
+
 app.use(( req, res ) => {
 res.status(400).send('404 not found...');
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/client/build/index.html'));
-  });
+
 
   
   app.listen(process.env.PORT || 8000, () => {
