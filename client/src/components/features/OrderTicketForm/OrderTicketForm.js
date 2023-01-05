@@ -1,97 +1,112 @@
+import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Row, Col, Alert, Progress } from 'reactstrap';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addSeatRequest, getRequests } from '../../../redux/seatsRedux';
 
 import './OrderTicketForm.scss';
-import SeatChooser from './../SeatChooser/SeatChooser';
+import SeatChooser from './../SeatChooser/SeatChooserContainer';
 
-const OrderTicketForm = () => {
-  const dispatch = useDispatch();
-  const requests = useSelector(getRequests);
-  console.log(requests);
+class OrderTicketForm extends React.Component {
 
-  const [order, setOrder] = useState({
-    client: '',
-    email: '',
-    day: 1,
-    seat: ''
-  });
-  const [isError, setIsError] = useState(false);
+  state = {
+    order: {
+      client: '',
+      email: '',
+      day: 1,
+      seat: '',
+    },
+    isError: false,
+  }
 
-  const updateSeat = (e, seatId) => {
+  updateSeat = (e, seatId) => {
+    const { order } = this.state;
+
     e.preventDefault();
-    setOrder({ ...order, seat: seatId });
+    this.setState({ order: { ...order, seat: seatId } });
   }
 
-  const updateTextField = ({ target }) => {
+  updateTextField = ({ target }) => {
+    const { order } = this.state;
     const { value, name } = target;
-    setOrder({ ...order, [name]: value });
+
+    this.setState({ order: { ...order, [name]: value } });
   }
 
-  const updateNumberField = ({ target }) => {
+  updateNumberField = ({ target }) => {
+    const { order } = this.state;
     const { value, name } = target;
-    setOrder({ ...order, [name]: parseInt(value) });
+
+    this.setState({ order: { ...order, [name]: parseInt(value) } });
   }
 
-  const submitForm = async (e) => {
+  submitForm = async (e) => {
+    const { order } = this.state;
+    const { addSeat } = this.props;
+
     e.preventDefault();
 
-    if(order.client && order.email && order.day && order.seat) {
-      dispatch(addSeatRequest(order));
-      setOrder({
-        client: '',
-        email: '',
-        day: 1,
-        seat: '',
+    if (order.client && order.email && order.day && order.seat) {
+      await addSeat(order);
+      this.setState({
+        order: {
+          client: '',
+          email: '',
+          day: 1,
+          seat: '',
+        },
+        isError: false,
       });
-      setIsError(false);
     } else {
-      setIsError(true);
+      this.setState({ isError: true });
     }
   }
 
-  return (
-    <Form className="order-ticket-form" onSubmit={submitForm}>
-      <Row>
-        <Col xs="12" md="6">
-          { (isError) && <Alert color="warning">There are some errors in you form. Have you fill all the fields? Maybe you forgot to choose your seat?</Alert> }
-          { (requests['ADD_SEAT'] && requests['ADD_SEAT'].error && !isError) && <Alert color="danger">{requests['ADD_SEAT'].error}</Alert> }
-          { (requests['ADD_SEAT'] && requests['ADD_SEAT'].success && !isError) && <Alert color="success">You've booked your ticket! Check you email in order to make a payment.</Alert> }
-          { (requests['ADD_SEAT'] && requests['ADD_SEAT'].pending) && <Progress animated className="mb-5" color="primary" value={75} /> }
-          <FormGroup>
-            <Label for="clientEmail">Name</Label>
-            <Input type="text" value={order.client} name="client" onChange={updateTextField} id="clientName" placeholder="John Doe" />
-          </FormGroup>
-          <FormGroup>
-            <Label for="clientEmail">Email</Label>
-            <Input type="email" value={order.email} name="email" onChange={updateTextField} id="clientEmail" placeholder="johndoe@example.com" />
-          </FormGroup>
-          <FormGroup>
-            <Label for="clientDay">Select which day of festivals are you interested in:</Label>
-            <Input type="select" value={order.day} name="day" onChange={updateNumberField} id="exampleSelect">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </Input>
-            <small id="dayHelp" className="form-text text-muted">Every day of the festival uses individual ticket. You can book only one ticket at the time.</small>
-          </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input required type="checkbox" /> I agree with <a href="/terms-and-conditions">Terms and conditions</a> and <a href="/privacy-policy">Privacy Policy</a>.
-            </Label>
-          </FormGroup>
-          <Button color="primary" className="mt-3">Submit</Button>
-        </Col>
-        <Col xs="12" md="6">
-          <SeatChooser 
-            chosenDay={order.day}
-            chosenSeat={order.seat} 
-            updateSeat={updateSeat} />
-        </Col>
-      </Row>
-    </Form>
-  )
+  render() {
+
+    const { updateSeat, updateTextField, updateNumberField, submitForm } = this;
+    const { requests } = this.props;
+    const { order, isError } = this.state;
+
+    return (
+      <Form className="order-ticket-form" onSubmit={submitForm}>
+        <Row>
+          <Col xs="12" md="6">
+            {(isError) && <Alert color="warning">There are some errors in you form. Have you fill all the fields? Maybe you forgot to choose your seat?</Alert>}
+            {(requests['ADD_SEAT'] && requests['ADD_SEAT'].error && !isError) && <Alert color="danger">{requests['ADD_SEAT'].error}</Alert>}
+            {(requests['ADD_SEAT'] && requests['ADD_SEAT'].success && !isError) && <Alert color="success">You've booked your ticket! Check you email in order to make a payment.</Alert>}
+            {(requests['ADD_SEAT'] && requests['ADD_SEAT'].pending) && <Progress animated className="mb-5" color="primary" value={75} />}
+            <FormGroup>
+              <Label for="clientEmail">Name</Label>
+              <Input type="text" value={order.client} name="client" onChange={updateTextField} id="clientName" placeholder="John Doe" />
+            </FormGroup>
+            <FormGroup>
+              <Label for="clientEmail">Email</Label>
+              <Input type="email" value={order.email} name="email" onChange={updateTextField} id="clientEmail" placeholder="johndoe@example.com" />
+            </FormGroup>
+            <FormGroup>
+              <Label for="clientDay">Select which day of festivals are you interested in:</Label>
+              <Input type="select" value={order.day} name="day" onChange={updateNumberField} id="exampleSelect">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </Input>
+              <small id="dayHelp" className="form-text text-muted">Every day of the festival uses individual ticket. You can book only one ticket at the time.</small>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input required type="checkbox" /> I agree with <a href="#">Terms and conditions</a> and <a href="#">Privacy Policy</a>.
+              </Label>
+            </FormGroup>
+            <Button color="primary" className="mt-3">Submit</Button>
+          </Col>
+          <Col xs="12" md="6">
+            <SeatChooser
+              chosenDay={order.day}
+              chosenSeat={order.seat}
+              updateSeat={updateSeat} />
+          </Col>
+        </Row>
+      </Form>
+    )
+  };
 }
 
 export default OrderTicketForm;
