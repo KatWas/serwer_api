@@ -37,7 +37,7 @@ app.use((req, res) => {
 })
 
 // connects our backed code with database
-mongoose.connect('mongodb://localhost:27017/NewWaveDB', { useNewUrlOarser: true});
+mongoose.connect('mongodb+srv://cluster0.xcoialp.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority', { useNewUrlOarser: true});
 const db = mongoose.connection;  
 
 
