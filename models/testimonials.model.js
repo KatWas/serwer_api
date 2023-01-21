@@ -1,8 +1,8 @@
-const moongoose = require('moongose');
+const mongoose = require('mongoose');
 
-const testimonialsSchema = new moongoose.Schema({
-    author: { type: String, reguire: true},
-    text: { type: String, reguire: true},
+const testimonialsSchema = new mongoose.Schema({
+  author: { type: String, required: true },
+  text: { type: String, required: true }
 });
 
-module.exports = moongoose.model('Testimonial', testimonialsSchema);
+module.exports = mongoose.model('Testimonial', testimonialsSchema);

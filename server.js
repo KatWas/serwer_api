@@ -36,10 +36,9 @@ app.use((req, res) => {
   res.status(404).send({message: '404 not found...'});
 })
 
-// connects our backed code with database
-mongoose.connect('mongodb+srv://cluster0.xcoialp.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority', { useNewUrlOarser: true});
-const db = mongoose.connection;  
-
+// connects our backend code with the database
+mongoose.connect('mongodb+srv://Bartek-wki:badaw352@cluster0.qoovd.mongodb.net/NewWaveDB?retryWrites=true&w=majority', { useNewUrlParser: true });
+const db = mongoose.connection;
 
 db.once('open', () => {
   console.log('Connected to the database');
@@ -53,5 +52,5 @@ const server = app.listen(process.env.PORT || 8000, () => {
 const io = socket(server);
 
 io.on('connection', (socket) => {
-  console.log('New client! Its id - ' + socket.id);
+  console.log('New client! Its id – ' + socket.id);
 })
