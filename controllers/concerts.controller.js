@@ -83,7 +83,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-exoport.getConcertsByPerfmorer = async (req, res) =>{
+exports.getConcertsByPerfmorer = async (req, res) =>{
   try {
     res.json(await ConcertsByPerfmorer({
       person: req.params.person
