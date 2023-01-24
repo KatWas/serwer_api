@@ -73,3 +73,47 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: err });
   }
 };
+
+exports.getAll = async (req, res) => {
+  try {
+    res.json(await Concert.find());
+  }
+  catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
+exoport.getConcertsByPerfmorer = async (req, res) =>{
+  try {
+    res.json(await ConcertsByPerfmorer({
+      person: req.params.person
+    }));
+    
+  } catch (err) {
+    res.status(500).json ({ message: err});
+    
+  }
+};
+
+exports.getConcertsByGenre = async (req, res) => {
+  try {
+    res.json(await Concert.find({
+     genre: req.params.genre
+    }));
+  }
+  catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
+
+exports.getConcertsByPrice = async (req, res) => {
+  try {
+    res.json(await Concert.find({
+      $and: [{ price: { $gt: req.params.price_min } }, { price: { $lte: req.params.price_max } }],
+    }));
+  }
+  catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
